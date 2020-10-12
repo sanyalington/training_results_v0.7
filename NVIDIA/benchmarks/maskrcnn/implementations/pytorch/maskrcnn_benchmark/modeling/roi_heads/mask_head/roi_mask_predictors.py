@@ -5,9 +5,9 @@ from torch.nn import functional as F
 
 from maskrcnn_benchmark.layers import Conv2d
 from maskrcnn_benchmark.layers import ConvTranspose2d
-from maskrcnn_benchmark.layers.nhwc.misc import Conv2d_NHWC
-from maskrcnn_benchmark.layers.nhwc import ConvTranspose2d_NHWC
-from maskrcnn_benchmark.layers.nhwc import nhwc_to_nchw_transform, nchw_to_nhwc_transform
+#from maskrcnn_benchmark.layers.nhwc.misc import Conv2d_NHWC
+#from maskrcnn_benchmark.layers.nhwc import ConvTranspose2d_NHWC
+#from maskrcnn_benchmark.layers.nhwc import nhwc_to_nchw_transform, nchw_to_nhwc_transform
 from maskrcnn_benchmark.layers.nhwc import init
 
 class MaskRCNNC4Predictor(nn.Module):

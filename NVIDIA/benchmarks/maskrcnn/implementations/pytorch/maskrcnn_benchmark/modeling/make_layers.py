@@ -9,7 +9,7 @@ from torch import nn
 from torch.nn import functional as F
 from maskrcnn_benchmark.config import cfg
 from maskrcnn_benchmark.layers import Conv2d
-from maskrcnn_benchmark.layers.nhwc.misc import Conv2d_NHWC
+#from maskrcnn_benchmark.layers.nhwc.misc import Conv2d_NHWC
 from maskrcnn_benchmark.modeling.poolers import Pooler
 from maskrcnn_benchmark.layers.nhwc import init
 

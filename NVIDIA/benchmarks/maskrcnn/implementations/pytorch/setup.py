@@ -56,12 +56,12 @@ def get_extensions():
             define_macros=define_macros,
             extra_compile_args=extra_compile_args,
         ),
-        extension("maskrcnn_benchmark.NHWC",
-            sources_nhwc,
-            include_dirs=include_dirs,
-            define_macros=define_macros,
-            extra_compile_args=copy.deepcopy(extra_compile_args),
-        )
+        #extension("maskrcnn_benchmark.NHWC",
+        #    sources_nhwc,
+        #    include_dirs=include_dirs,
+        #    define_macros=define_macros,
+        #    extra_compile_args=copy.deepcopy(extra_compile_args),
+        #)
     ]
 
     return ext_modules

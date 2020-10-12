@@ -7,7 +7,7 @@ from torch.autograd.function import once_differentiable
 from torch.nn.modules.utils import _pair
 
 from maskrcnn_benchmark import _C
-from maskrcnn_benchmark import NHWC
+#from maskrcnn_benchmark import NHWC
 
 from apex import amp
 

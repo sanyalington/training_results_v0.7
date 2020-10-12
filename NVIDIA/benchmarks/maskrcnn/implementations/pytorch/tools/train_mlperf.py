@@ -136,10 +136,10 @@ def mlperf_log_epoch_start(iteration, iters_per_epoch):
         log_start(key=constants.EPOCH_START, metadata={"epoch_num": epoch})
 
 from maskrcnn_benchmark.layers.batch_norm import FrozenBatchNorm2d
-from maskrcnn_benchmark.layers.nhwc.batch_norm import FrozenBatchNorm2d_NHWC
+#from maskrcnn_benchmark.layers.nhwc.batch_norm import FrozenBatchNorm2d_NHWC
 from maskrcnn_benchmark.modeling.backbone.resnet import Bottleneck
 def cast_frozen_bn_to_half(module):
-    if isinstance(module, FrozenBatchNorm2d) or isinstance(module, FrozenBatchNorm2d_NHWC):
+    if isinstance(module, FrozenBatchNorm2d): #or isinstance(module, FrozenBatchNorm2d_NHWC):
         module.half()
     for child in module.children():
         cast_frozen_bn_to_half(child)

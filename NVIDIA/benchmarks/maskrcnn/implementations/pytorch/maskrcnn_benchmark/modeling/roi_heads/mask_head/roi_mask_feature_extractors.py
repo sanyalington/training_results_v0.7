@@ -7,7 +7,7 @@ from ..box_head.roi_box_feature_extractors import ResNet50Conv5ROIFeatureExtract
 from maskrcnn_benchmark.modeling.poolers import Pooler
 from maskrcnn_benchmark.modeling.make_layers import make_conv3x3
 from maskrcnn_benchmark import _C
-from maskrcnn_benchmark.layers.nhwc import nchw_to_nhwc_transform, nhwc_to_nchw_transform
+#from maskrcnn_benchmark.layers.nhwc import nchw_to_nhwc_transform, nhwc_to_nchw_transform
 
 class MaskRCNNFPNFeatureExtractor(nn.Module):
     """

@@ -8,8 +8,8 @@ from maskrcnn_benchmark.modeling.rpn.retinanet.retinanet import build_retinanet
 from .loss import make_rpn_loss_evaluator
 from .anchor_generator import make_anchor_generator
 from .inference import make_rpn_postprocessor
-from maskrcnn_benchmark.layers.nhwc import Conv2d_NHWC, nhwc_to_nchw_transform, nchw_to_nhwc_transform
-from maskrcnn_benchmark.layers.nhwc import init
+#from maskrcnn_benchmark.layers.nhwc import Conv2d_NHWC, nhwc_to_nchw_transform, nchw_to_nhwc_transform
+#from maskrcnn_benchmark.layers.nhwc import init
 
 @registry.RPN_HEADS.register("SingleConvRPNHead")
 class RPNHead(nn.Module):

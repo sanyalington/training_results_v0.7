@@ -22,10 +22,10 @@ from collections import namedtuple
 import torch
 import torch.nn.functional as F
 from torch import nn
-from maskrcnn_benchmark.layers.nhwc import MaxPool2d_NHWC, FrozenBatchNorm2d_NHWC
-from maskrcnn_benchmark.layers.nhwc.misc import Conv2d_NHWC
-from maskrcnn_benchmark.layers.nhwc import kaiming_uniform_
-from maskrcnn_benchmark.layers.nhwc import nchw_to_nhwc_transform, nhwc_to_nchw_transform
+#from maskrcnn_benchmark.layers.nhwc import MaxPool2d_NHWC, FrozenBatchNorm2d_NHWC
+#from maskrcnn_benchmark.layers.nhwc.misc import Conv2d_NHWC
+from maskrcnn_benchmark.layers.nhwc.init import kaiming_uniform_
+#from maskrcnn_benchmark.layers.nhwc import nchw_to_nhwc_transform, nhwc_to_nchw_transform
 from maskrcnn_benchmark.layers import FrozenBatchNorm2d
 from maskrcnn_benchmark.layers import Conv2d
 from maskrcnn_benchmark.modeling.make_layers import group_norm
