@@ -6,7 +6,7 @@ set -euxo pipefail
 : "${CONT:?CONT not set}"
 
 # Vars with defaults
-: "${NEXP:=5}"
+: "${NEXP:=1}"
 : "${DATESTAMP:=$(date +'%y%m%d%H%M%S%N')}"
 : "${CLEAR_CACHES:=1}"
 : "${DATADIR:=/raid/datasets/coco/coco-2017}"
