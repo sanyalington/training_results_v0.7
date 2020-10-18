@@ -14,6 +14,9 @@ from torch.utils.hipify import hipify_python
 
 requirements = ["torch", "torchvision"]
 
+torch_ver = [int(x) for x in torch.__version__.split(".")[:2]]
+assert torch_ver >= [1, 4], "Requires PyTorch >= 1.4"
+
 
 def get_extensions():
     this_dir = os.path.dirname(os.path.abspath(__file__))
