@@ -7,7 +7,7 @@ export EXTRA_CONFIG='SOLVER.BASE_LR 0.0075 SOLVER.MAX_ITER 80000 SOLVER.WARMUP_F
 ## System run parms
 export DGXNNODES=1
 #export DGXSYSTEM=$(basename $(readlink -f ${BASH_SOURCE[0]}) | sed 's/^config_//' | sed 's/\.sh$//' )
-export DGXSYSTEM='DGX1_custom'
+export DGXSYSTEM='DGX1_rocm_custom'
 export WALLTIME=04:00:00
 
 ## System config params
