@@ -11,9 +11,11 @@
 #include "nms_batched.h"
 #include "anchor_generator.h"
 #include "rpn_generate_proposals_batched.h"
-#if defined(WITH_CUDA) || defined(WITH_HIP)
+#if defined(WITH_CUDA)
 #include "cuda/rpn_generate_proposals.h"
 //#include "cuda/rpn_generate_proposals_batched.h"
+#elif defined(WITH_HIP)
+#include "hip/rpn_generate_proposals.h"
 #endif
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
