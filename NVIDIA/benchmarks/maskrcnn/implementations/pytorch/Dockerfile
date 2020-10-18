@@ -31,6 +31,7 @@ RUN pip install --no-cache-dir https://github.com/mlperf/logging/archive/9ea0afa
 
 # Copy detectron code and build
 COPY . .
+ENV FORCE_CUDA=1
 RUN pip install -e .
 RUN /opt/conda/bin/conda install -y numpy==1.17.4
 ENV OMP_NUM_THREADS=1
