@@ -21,7 +21,11 @@
 #include <torch/extension.h>
 
 #include <ATen/ATen.h>
+#if defined(WITH_CUDA)
 #include <THC/THC.h>
+#elif defined(WITH_HIP)
+#include <THH/THH.h>
+#endif
 #include <vector>
 
 std::vector<at::Tensor> anchor_generator(std::vector<int64_t> image_shape,       // (height, width)
