@@ -17,3 +17,4 @@ export DGXNSOCKET=1
 export DGXHT=2         # HT is on is 2, HT off is 1
 
 export PYTORCH_JIT=0
+export MIOPEN_FIND_MODE=2
