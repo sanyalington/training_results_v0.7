@@ -10,6 +10,7 @@ from setuptools import setup
 from torch.utils.cpp_extension import CUDA_HOME
 from torch.utils.cpp_extension import CppExtension
 from torch.utils.cpp_extension import CUDAExtension
+from torch.utils.hipify import hipify_python
 
 requirements = ["torch", "torchvision"]
 
@@ -19,30 +20,89 @@ def get_extensions():
     extensions_dir = os.path.join(this_dir, "maskrcnn_benchmark", "csrc")
 
     main_file = glob.glob(os.path.join(extensions_dir, "vision.cpp"))
-    main_file_nhwc = glob.glob(os.path.join(extensions_dir, "cuda/nhwc.cpp"))
+    #main_file_nhwc = glob.glob(os.path.join(extensions_dir, "cuda/nhwc.cpp"))
     source_cpu = glob.glob(os.path.join(extensions_dir, "cpu", "*.cpp"))
-    source_cuda = glob.glob(os.path.join(extensions_dir, "cuda", "*.cu"))
-    source_cuda_nhwc = glob.glob(os.path.join(extensions_dir, "cuda/nhwc", "*.cu"))
-    source_cpp_nhwc = glob.glob(os.path.join(extensions_dir, "cuda/nhwc", "*.cpp"))
+    #source_cuda_nhwc = glob.glob(os.path.join(extensions_dir, "cuda/nhwc", "*.cu"))
+    #source_cpp_nhwc = glob.glob(os.path.join(extensions_dir, "cuda/nhwc", "*.cpp"))
 
     sources = main_file + source_cpu
-    sources_nhwc = source_cpp_nhwc + source_cuda_nhwc + main_file_nhwc
+    #sources_nhwc = source_cpp_nhwc + source_cuda_nhwc + main_file_nhwc
+
+    is_rocm_pytorch = False
+    if torch_ver >= [1, 5]:
+        from torch.utils.cpp_extension import ROCM_HOME
+
+        is_rocm_pytorch = (
+            True if ((torch.version.hip is not None) and (ROCM_HOME is not None)) else False
+        )
+
+    print('rocm pytorch detected', is_rocm_pytorch)
+
+    if is_rocm_pytorch:
+        hipify_python.hipify(
+            project_directory=this_dir,
+            output_directory=this_dir,
+            includes="maskrcnn_benchmark/csrc/*",
+            show_detailed=True,
+            is_pytorch_extension=True,
+        )
+
+        # Current version of hipify function in pytorch creates an intermediate directory
+        # named "hip" at the same level of the path hierarchy if a "cuda" directory exists,
+        # or modifying the hierarchy, if it doesn't. Once pytorch supports
+        # "same directory" hipification (https://github.com/pytorch/pytorch/pull/40523),
+        # the source_cuda will be set similarly in both cuda and hip paths, and the explicit
+        # header file copy (below) will not be needed.
+        #source_cuda = glob.glob(path.join(extensions_dir, "**", "hip", "*.hip")) + glob.glob(
+        #    path.join(extensions_dir, "hip", "*.hip")
+        #)
+        source_cuda = glob.glob(os.path.join(extensions_dir, "hip", "*.hip"))
+
+        #shutil.copy(
+        #    "detectron2/layers/csrc/box_iou_rotated/box_iou_rotated_utils.h",
+        #    "detectron2/layers/csrc/box_iou_rotated/hip/box_iou_rotated_utils.h",
+        #)
+        #shutil.copy(
+        #    "detectron2/layers/csrc/deformable/deform_conv.h",
+        #    "detectron2/layers/csrc/deformable/hip/deform_conv.h",
+        #)
+
+    else:
+        source_cuda = glob.glob(os.path.join(extensions_dir, "cuda", "*.cu"))
+        #source_cuda = glob.glob(path.join(extensions_dir, "**", "*.cu")) + glob.glob(
+        #    path.join(extensions_dir, "*.cu")
+        #)
+
+    #sources = [main_source] + sources
+    #sources = [
+    #    s
+    #    for s in sources
+    #    if not is_rocm_pytorch or torch_ver < [1, 7] or not s.endswith("hip/vision.cpp")
+    #]
+
+    ### old code resumes here
+
     extension = CppExtension
 
     extra_compile_args = {"cxx": []}
     define_macros = []
 
-    if CUDA_HOME is not None:
+    #if CUDA_HOME is not None:
+    if (torch.cuda.is_available() and ((CUDA_HOME is not None) or is_rocm_pytorch)):
         extension = CUDAExtension
         sources += source_cuda
 
-        define_macros += [("WITH_CUDA", None)]
-        extra_compile_args["nvcc"] = [
-            "-DCUDA_HAS_FP16=1",
-            "-D__CUDA_NO_HALF_OPERATORS__",
-            "-D__CUDA_NO_HALF_CONVERSIONS__",
-            "-D__CUDA_NO_HALF2_OPERATORS__",
-        ]
+        if not is_rocm_pytorch:
+            define_macros += [("WITH_CUDA", None)]
+            extra_compile_args["nvcc"] = [
+                "-DCUDA_HAS_FP16=1",
+                "-D__CUDA_NO_HALF_OPERATORS__",
+                "-D__CUDA_NO_HALF_CONVERSIONS__",
+                "-D__CUDA_NO_HALF2_OPERATORS__",
+            ]
+        else:
+            define_macros += [("WITH_HIP", None)]
+            extra_compile_args["nvcc"] = []
 
     sources = [os.path.join(extensions_dir, s) for s in sources]
 
