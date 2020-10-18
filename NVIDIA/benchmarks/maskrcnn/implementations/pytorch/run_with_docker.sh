@@ -43,7 +43,8 @@ cleanup_docker
 trap 'set -eux; cleanup_docker' EXIT
 
 # Setup container
-nvidia-docker run --rm --init --detach \
+#nvidia-docker run --rm --init --detach \
+docker run --privileged --rm --init --detach --device=/dev/kfd --device=/dev/dri --group-add video \
     --net=host --uts=host --ipc=host --security-opt=seccomp=unconfined \
     --ulimit=stack=67108864 --ulimit=memlock=-1 \
     --name="${_cont_name}" "${_cont_mounts[@]}" \
