@@ -4,7 +4,9 @@
 #include "ROIAlign.h"
 #include "ROIPool.h"
 #include "SigmoidFocalLoss.h"
+#if defined(WITH_CUDA) || defined(WITH_HIP)
 #include "generate_mask_targets.h"
+#endif
 #include "box_iou.h"
 #include "box_encode.h"
 #include "match_proposals.h"
@@ -26,7 +28,9 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("roi_pool_backward", &ROIPool_backward, "ROIPool_backward");
   m.def("sigmoid_focalloss_forward", &SigmoidFocalLoss_forward, "SigmoidFocalLoss_forward");
   m.def("sigmoid_focalloss_backward", &SigmoidFocalLoss_backward, "SigmoidFocalLoss_backward");
+#if defined(WITH_CUDA) || defined(WITH_HIP)
   m.def("generate_mask_targets", &generate_mask_targets, "generate_mask_targets");
+#endif
   m.def("box_iou", &box_iou, "box_iou");
   m.def("box_encode", &box_encode, "box_encode");
   m.def("match_proposals", &match_proposals, "match_proposals");

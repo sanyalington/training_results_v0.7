@@ -16,6 +16,11 @@
 
 #pragma once
 #include "cpu/vision.h"
+#if defined(WITH_CUDA)
+#include "cuda/vision.h"
+#elif defined(WITH_HIP)
+#include "hip/vision.h"
+#endif
 #ifndef _generate_mask_targets_h_
 #define _generate_mask_targets_h_ 
 

@@ -91,7 +91,8 @@ def get_extensions():
     define_macros = []
 
     #if CUDA_HOME is not None:
-    if (torch.cuda.is_available() and ((CUDA_HOME is not None) or is_rocm_pytorch)):
+    #if (torch.cuda.is_available() and ((CUDA_HOME is not None) or is_rocm_pytorch)):
+    if (torch.cuda.is_available() and ((CUDA_HOME is not None) or is_rocm_pytorch)) or os.getenv("FORCE_CUDA", "0") == "1":
         extension = CUDAExtension
         sources += source_cuda
 
