@@ -3,7 +3,7 @@
 
 #include "cpu/vision.h"
 
-#ifdef WITH_CUDA
+#if defined(WITH_CUDA) || defined(WITH_HIP)
 #include "cuda/vision.h"
 #endif
 
@@ -16,7 +16,7 @@ at::Tensor ROIAlign_forward(const at::Tensor& input,
                             const int sampling_ratio,
                             const bool is_nhwc) {
   if (input.is_cuda()) {
-#ifdef WITH_CUDA
+#if defined(WITH_CUDA) || defined(WITH_HIP)
     return ROIAlign_forward_cuda(input, rois, spatial_scale, pooled_height, pooled_width, sampling_ratio, is_nhwc);
 #else
     AT_ERROR("Not compiled with GPU support");
@@ -37,7 +37,7 @@ at::Tensor ROIAlign_backward(const at::Tensor& grad,
                              const int sampling_ratio,
                              const bool is_nhwc) {
   if (grad.is_cuda()) {
-#ifdef WITH_CUDA
+#if defined(WITH_CUDA) || defined(WITH_HIP)
     return ROIAlign_backward_cuda(grad, rois, spatial_scale, pooled_height, pooled_width, batch_size, channels, height, width, sampling_ratio, is_nhwc);
 #else
     AT_ERROR("Not compiled with GPU support");

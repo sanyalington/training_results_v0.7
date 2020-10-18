@@ -2,7 +2,7 @@
 #pragma once
 #include "cpu/vision.h"
 
-#ifdef WITH_CUDA
+#if defined(WITH_CUDA) || defined(WITH_HIP)
 #include "cuda/vision.h"
 #endif
 
@@ -12,7 +12,7 @@ at::Tensor nms(const at::Tensor& dets,
                const float threshold) {
 
   if (dets.is_cuda()) {
-#ifdef WITH_CUDA
+#if defined(WITH_CUDA) || defined(WITH_HIP)
     // TODO raise error if not compiled with CUDA
     if (dets.numel() == 0)
       return at::empty({0}, dets.options().dtype(at::kLong).device(at::kCPU));

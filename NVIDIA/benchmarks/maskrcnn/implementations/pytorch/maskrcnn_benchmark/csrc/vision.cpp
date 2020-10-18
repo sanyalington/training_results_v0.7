@@ -11,7 +11,7 @@
 #include "nms_batched.h"
 #include "anchor_generator.h"
 #include "rpn_generate_proposals_batched.h"
-#ifdef WITH_CUDA
+#if defined(WITH_CUDA) || defined(WITH_HIP)
 #include "cuda/rpn_generate_proposals.h"
 //#include "cuda/rpn_generate_proposals_batched.h"
 #endif
@@ -31,7 +31,7 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 
   m.def("nms_batched", &nms_batched, "nms_batched"); 
   m.def("anchor_generator", &anchor_generator, "anchor_generator");
-#ifdef WITH_CUDA
+#if defined(WITH_CUDA) || defined(WITH_HIP)
   m.def("GeneratePreNMSUprightBoxesBatched", &GeneratePreNMSUprightBoxesBatched, "RPN Proposal Generation Batched");
 #endif
 }
