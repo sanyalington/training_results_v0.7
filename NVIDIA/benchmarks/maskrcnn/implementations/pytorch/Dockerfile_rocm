@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG FROM_IMAGE_NAME=rocm/pytorch:rocm3.8_ubuntu18.04_py3.6_pytorch
+#ARG FROM_IMAGE_NAME=rocm/pytorch:rocm3.8_ubuntu18.04_py3.6_pytorch
+ARG FROM_IMAGE_NAME=compute-artifactory.amd.com:5000/rocm-plus-docker/framework/compute-rocm-rel-3.9:15_ubuntu18.04_py3.6_pytorch_rocm3.9_internal_testing_5d61328_18
 FROM ${FROM_IMAGE_NAME}
 
 # Install dependencies for system configuration logger
@@ -27,6 +28,19 @@ RUN git clone --recursive https://github.com/ROCmSoftwarePlatform/apex \
  && cd apex \
  && python3.6 setup.py install --cuda_ext --cpp_ext
 
+WORKDIR /workspace/dwl
+RUN pip install pybind11 Cython
+RUN git clone https://github.com/NVIDIA/cocoapi \
+ && cd cocoapi/PythonAPI \
+ && python3.6 setup.py build_ext install
+
+#install torchvision: only required for 3.9rc2
+WORKDIR /workspace/dwl
+ENV FORCE_CUDA=1
+RUN git clone https://github.com/pytorch/vision \
+ && cd vision \
+ && python3.6 setup.py install 
+
 # Install Python dependencies
 WORKDIR /workspace/object_detection
 
@@ -34,8 +48,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir https://github.com/mlperf/logging/archive/9ea0afa.zip \
  && pip install --no-cache-dir -r requirements.txt
 
-RUN pip install pycocotools
-RUN pip install tqdm
+RUN pip install --no-cache-dir tqdm
 
 # Copy detectron code and build
 COPY . .

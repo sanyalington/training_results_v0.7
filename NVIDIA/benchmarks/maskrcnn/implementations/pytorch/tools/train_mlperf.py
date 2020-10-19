@@ -47,6 +47,7 @@ except ImportError:
     raise ImportError('Use APEX for multi-precision via apex.amp')
 
 #torch.backends.cudnn.deterministic = True
+#torch.backends.cudnn.benchmark = True
 # Loop over all finished async results, return a dict of { tag : (bbox_map, segm_map) }
 def check_completed_tags():
     # Evaluator is only valid on master rank - all others will have nothing.
