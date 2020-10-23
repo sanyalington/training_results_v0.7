@@ -52,11 +52,12 @@ class FP16_Optimizer(object):
             if dynamic_loss_args is not None:
                 raise SystemError("Do not support dynamic loss scale args for now.")
             self.dynamic_loss_scale = True
-            self.cur_scale = 2**16
+            self.cur_scale = 2**10
             self.cur_iter = 0
             self.last_overflow_iter = -1
             self.scale_factor = 2
-            self.scale_window = 1000
+            self.scale_window = 2000
+            self.max_dyn_scale = 2**16
         else:
             self.dynamic_loss_scale = False
             self.cur_iter = 0
@@ -156,9 +157,14 @@ class FP16_Optimizer(object):
                     print("Using dynamic loss scale of ", self.cur_scale)
                 self.cur_scale = max(self.cur_scale/self.scale_factor, 1)
                 self.last_overflow_iter = self.cur_iter
+                if self.verbose:
+                    print("Using new dynamic loss scale of ", self.cur_scale)
             else:
                 if (self.cur_iter - self.last_overflow_iter) % self.scale_window == 0:
-                    self.cur_scale *= self.scale_factor
+                    self.cur_scale = min(self.scale_factor*self.cur_scale,self.max_dyn_scale)
+                    if self.verbose:
+                        print("Updating dynamic loss scale to ", self.cur_scale)
+
         else:
             if skip:
                 print("\nGrad overflow on iteration ", self.cur_iter)
@@ -204,6 +210,7 @@ class FP16_Optimizer(object):
             state_dict['last_overflow_iter'] = self.last_overflow_iter
             state_dict['scale_factor'] = self.scale_factor
             state_dict['scale_window'] = self.scale_window
+            state_dict['max_dyn_scale'] = self.max_dyn_scale
         state_dict['optimizer_state_dict'] = self.optimizer.state_dict()
         state_dict['fp16_params'] = self.fp16_params
         state_dict['fp32_from_fp16_params'] = self.fp32_from_fp16_params
@@ -233,6 +240,7 @@ class FP16_Optimizer(object):
             self.last_overflow_iter = state_dict['last_overflow_iter']
             self.scale_factor = state_dict['scale_factor']
             self.scale_window = state_dict['scale_window']
+            self.max_dyn_scale = state_dict['max_dyn_scale']
         self.optimizer.load_state_dict(state_dict['optimizer_state_dict'])
 
         self.fp16_params = state_dict['fp16_params'] 
