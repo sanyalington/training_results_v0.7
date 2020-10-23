@@ -9,7 +9,7 @@ export PYTORCH_JIT=0
 ## System run parms
 export DGXNNODES=1
 #export DGXSYSTEM=$(basename $(readlink -f ${BASH_SOURCE[0]}) | sed 's/^config_//' | sed 's/\.sh$//' )
-export DGXSYSTEM='DGX1_aws'
+export DGXSYSTEM='DGX1_rocm_8gpu'
 export WALLTIME=04:00:00
 
 ## System config params
