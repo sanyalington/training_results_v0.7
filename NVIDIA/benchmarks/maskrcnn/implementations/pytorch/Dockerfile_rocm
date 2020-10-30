@@ -13,7 +13,8 @@
 # limitations under the License.
 
 #ARG FROM_IMAGE_NAME=rocm/pytorch:rocm3.8_ubuntu18.04_py3.6_pytorch
-ARG FROM_IMAGE_NAME=compute-artifactory.amd.com:5000/rocm-plus-docker/framework/compute-rocm-rel-3.9:15_ubuntu18.04_py3.6_pytorch_rocm3.9_internal_testing_5d61328_18
+#ARG FROM_IMAGE_NAME=compute-artifactory.amd.com:5000/rocm-plus-docker/framework/compute-rocm-rel-3.9:15_ubuntu18.04_py3.6_pytorch_rocm3.9_internal_testing_5d61328_18
+ARG FROM_IMAGE_NAME=compute-artifactory.amd.com:5000/rocm-plus-docker/framework/compute-rocm-rel-3.9:17_ubuntu18.04_py3.6_pytorch_rocm3.9_internal_testing_5d61328_25
 FROM ${FROM_IMAGE_NAME}
 
 # Install dependencies for system configuration logger

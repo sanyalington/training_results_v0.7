@@ -37,7 +37,10 @@ mapfile -t _config_env < <(for v in "${_config_env[@]}"; do echo "--env=$v"; don
 
 # Cleanup container
 cleanup_docker() {
-    docker container rm -f "${_cont_name}" || true
+    #docker container rm -f "${_cont_name}" || true
+    docker stop "${_cont_name}" || true 
+    docker container rm -f object_detection_debug || true
+    docker rename "${_cont_name}" object_detection_debug || true
 }
 cleanup_docker
 trap 'set -eux; cleanup_docker' EXIT
@@ -70,8 +73,9 @@ from mlperf_logging.mllog import constants
 from maskrcnn_benchmark.utils.mlperf_logger import log_event
 log_event(key=constants.CACHE_CLEAR, value=True, stack_offset=0)"
         fi
-
-        # Run experiment
-        docker exec -it "${_config_env[@]}" "${_cont_name}" bash
-    ) #|& tee "${_logfile_base}_${_experiment_index}.log"
+        #enter interactive mode
+        ##docker exec -it "${_config_env[@]}" "${_cont_name}" bash 
+        # Run experiment 
+        docker exec -it "${_config_env[@]}" "${_cont_name}" ./run_and_time.sh
+    ) |& tee "${_logfile_base}_${_experiment_index}.log"
 done
